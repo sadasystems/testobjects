@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"/>
+<title></title>
 <script>
-var a=window.location.search,b1=/pz=(\d+)/.exec(a),b2=/pc=(\d+)/.exec(a),b3=/rz=(\d+)/.exec(a),b4=/rc=(\d+)/.exec(a),b5=/i=(\d+)/.exec(a),b6=/m=(\d+)/.exec(a),b8=/a=(\w+)/.exec(a),b9=/b=(\d+)/.exec(a),c=function(b){if(this!==this.parent){b.p={z:b1[1],c:b2[1],i:b5[1]};b.r={z:b3[1],c:b4[1]};b.m=b6[1];this.parent.postMessage(JSON.stringify(b),"*")}},d="undefined",aa;c({status:"loaded"});aa=function(){var e,j=document.childNodes[1].outerHTML,h=parseInt(b9[1],10),m,b,l=0,k,i=[],f="abcdefghijklmnopqrstuvwxyz0123456789",g={},n;for(b=0;b<b8[1].length;b++){l+=b8[1].charCodeAt(b)}k=Math.floor(l/b8[1].length);m=Math.floor(j.length/h);for(b=m;b<j.length;b+=m){i.push(f.charAt((j.charCodeAt(b)^k)%f.length))}if((d!==typeof window.performance)&&(d!==typeof window.performance.timing)){e=window.performance.timing;g={status:"success",hash:i.join("")};n=Object.keys(e);n=n.length?n:Object.keys(Object.getPrototypeOf(e));for(b=0;b<n.length;b++){if("number"===typeof e[n[b]]){g[n[b]]=e[n[b]]}}c(g)}else{c({status:"error"})}};
+function cdxt(){this.a=function(){this.c=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+)-(\d+)/.exec(window.location.search);this.b({s:"l"})};this.b=function(d){var c=window,b=this.c;if(c!==c.parent){d.p={z:b[2],c:b[3],i:b[6]};d.r={z:b[4],c:b[5]};d.m=b[1];c.parent.postMessage(JSON.stringify(d),"*")}};this.d=function(){setTimeout(this.e(),0)};this.e=function(){var a=this;return function(){a.f()}};this.f=function(){var b,j,h,g,m,a,l=0,k,f=[],c="abcdefghijklmnopqrstuvwxyz0123456789",d={};try{j=document.childNodes[1].outerHTML;h=this.c;g=parseInt(h[8],10);for(a=0;a<h[7].length;a++){l+=h[7].charCodeAt(a)}k=Math.floor(l/h[7].length);m=Math.floor(j.length/g);for(a=m;a<j.length;a+=m){f.push(c.charAt((j.charCodeAt(a)^k)%c.length))}b=window.performance.timing;d={s:"s",h:f.join("")};for(a in b){if("number"===typeof b[a]){d[a]=b[a]}}this.b(d)}catch(i){this.b({s:"e"})}}}if("undefined"===typeof cdxu){(function(){var g=window,f=new cdxt(),e=function(){f.d()},i="addEventListener",h="attachEvent";f.a();if(g[i]){g[i]("load",e,false)}else{if(g[h]){g[h]("onload",e)}}}())};
 </script>
 </head>
-<body onload="setTimeout(aa, 0);">
+<body>
 </body>
 </html>
