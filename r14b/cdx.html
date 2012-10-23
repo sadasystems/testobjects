@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<script>
+function cdxt(){this.a=function(){this.c=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+)-(\d+)/.exec(window.location.search);this.b({s:"l"})};this.b=function(d){var c=window,b=this.c;if(c!==c.parent){d.p={z:b[2],c:b[3],i:b[6]};d.r={z:b[4],c:b[5]};d.m=b[1];c.parent.postMessage(JSON.stringify(d),"*")}};this.d=function(){setTimeout(this.e(),0)};this.e=function(){var a=this;return function(){a.f()}};this.f=function(){var b,j,h,g,m,a,l=0,k,f=[],c="abcdefghijklmnopqrstuvwxyz0123456789",d={};try{j=document.childNodes[1].outerHTML;h=this.c;g=parseInt(h[8],10);for(a=0;a<h[7].length;a++){l+=h[7].charCodeAt(a)}k=Math.floor(l/h[7].length);m=Math.floor(j.length/g);for(a=m;a<j.length;a+=m){f.push(c.charAt((j.charCodeAt(a)^k)%c.length))}b=window.performance.timing;d={s:"s",h:f.join("")};for(a in b){if("number"===typeof b[a]){d[a]=b[a]}}this.b(d)}catch(i){this.b({s:"e"})}}}if("undefined"===typeof cdxu){(function(){var g=window,f=new cdxt(),e=function(){f.d()},i="addEventListener",h="attachEvent";f.a();if(g[i]){g[i]("load",e,false)}else{if(g[h]){g[h]("onload",e)}}}())};
+</script>
+</head>
+<body>
+</body>
+</html>
