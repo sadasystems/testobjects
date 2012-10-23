@@ -4,6 +4,12 @@ import os
 from os.path import dirname, abspath, join
 import shutil
 
+# This list of providers can be obtained using the following query:
+# select '''' || provider_id || ''',' from providers where enabled = true and provider_category_id in (2,3) order by provider_id;
+#
+# In addition, add the 'cb' item. Not sure what this is for, but
+# it's been included in each directory up to now.
+
 providers = [
     '14',
     '17',
