@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Node ID Detection</title>
+<meta charset="utf-8"/>
+</head>
+<body>
+<!-- Copyright 2013 Cedexis Inc. -->
+<script type="text/javascript">
+(function() {
+    var request = new XMLHttpRequest();
+    request.open('HEAD', '/l3', true);
+    request.setRequestHeader('X-WR-Diag', 'host');
+    request.onreadystatechange = function() {
+        var headers, match;
+        if (this.readyState == this.HEADERS_RECEIVED) {
+            if (this.status == 200) {
+                headers = this.getAllResponseHeaders();
+                match = /X-WR-Diag: Host:(\d+)/.exec(headers);
+                if (match) {
+                    if (match.length == 2) {
+                        parent.postMessage(JSON.stringify({ node: match[1] }), "*");
+                        return;
+                    }
+                }
+            }
+        }
+    };
+    request.send();
+}());
+</script>
+</body>
+</html>
