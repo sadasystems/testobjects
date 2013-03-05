@@ -72,12 +72,11 @@
     
     request.onreadystatechange = function() {
 
-        var headers, match, code;
+        var headers, match;
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                match = /X-WR-DIAG: Host:([\d]+) Type:.*$/.exec(headers);
-                console.log(match);
+                match = /x-wr-diag:\s+host:(\d+)/im.exec(headers);
                 if (match) {
                     if (2 === match.length) {
                         report('s', match[1]);
