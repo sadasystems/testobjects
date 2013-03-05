@@ -71,23 +71,16 @@
 
     
     request.onreadystatechange = function() {
-        //For early testing, switch airport codes to numbers
-        var codes = {
-            sjc:1001,
-            lax:1002,
-            sea:1003};
 
-        var headers, match, code;
+        var headers, match;
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                match = /X-Node-Id: [\w ]+\(([\w]+)/.exec(headers);
-                console.log(match);
+                match = /Server: ECS \(([\w]+)\/[\w]+\)/.exec(headers);
+                //console.log(match);
                 if (match) {
                     if (2 === match.length) {
-                        code = codes.match[1];
-                        console.log(code);
-                        report('s', code);
+                        report('s', match[1]);
                         return;
                     }
                 }
