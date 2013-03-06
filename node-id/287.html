@@ -79,7 +79,9 @@
                 match = /x-cache:\s+\w+\s+from\s+\w(\d+-\d+-\d+-\d+).*$/im.exec(headers);
                 if (match) {
                     if (2 === match.length) {
-                        report('s', match[1]);
+                        node = match[1].replace(/\-/g,'.');
+                        //console.log(node);
+                        report('s', node);
                         return;
                     }
                 }
