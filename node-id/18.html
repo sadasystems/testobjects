@@ -77,7 +77,7 @@
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
                 //X-HW: 1364422241.cj016s2
-                match = /X-HW:\s[0-9]+\.([0-9a-z]+)$/.exec(headers);
+                match = /X-HW:\s+[0-9]+\.([0-9a-z]+)/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {

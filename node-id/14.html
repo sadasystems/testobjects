@@ -77,7 +77,7 @@
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
                 //X-Amz-Cf-Id: mDmHS5NB-JvihBCPrDDuy6YsPE9GOPoR5ldV9NWNl00tmkxdRvXuMA==
-                match = /X-Amz-Cf-Id:\s\.(.*)$/.exec(headers);
+                match = /X-Amz-Cf-Id:\s+(.*)/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
