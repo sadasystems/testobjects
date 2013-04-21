@@ -77,7 +77,7 @@
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
                 //Via: 1.1 mfc2.sjc1.bitgravity.com:80
-                match = /Via:\s+[0-9]\.[0-9]\s+\w+\.(\w+)\..*$/.exec(headers);
+                match = /Via:\s+[0-9]\.[0-9]\s+\w+\.(\w+)\./.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
