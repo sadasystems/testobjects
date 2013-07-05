@@ -68,18 +68,20 @@
     // returned via a response header.  This isn't necessary unless the
     // server requires it.
     //request.setRequestHeader('X-Some-Custom-Header', 'Gimme the Node ID!');
+
     
     request.onreadystatechange = function() {
+
         var headers, match;
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                //X-HW: 1372820539.dop004.la2.t,1372820539.cds010.la2.c
-                match = /x-hw:\s+(.+)/i.exec(headers);
+                //X-HW: 1364422241.cj016s2
+                match = /X-HW:\s+[0-9]+\.([0-9a-z]+)/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
-                        report('s', match[1].replace(/,/g, '@'));
+                        report('s', match[1]);
                         return;
                     }
                 }
