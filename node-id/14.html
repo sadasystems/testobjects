@@ -72,18 +72,35 @@
     
     request.onreadystatechange = function() {
 
-        var headers, match;
+        var headers, match, p1, p2, match_rid, match_server;
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
+                //Via: 1.0 cbc24cfe0a4f99decef499f7250bdd71.cloudfront.net (CloudFront)
+                match_server = /Via:\s\d\.\d\s(\w+)\.cloudfront.net/.exec(headers);
                 //X-Amz-Cf-Id: mDmHS5NB-JvihBCPrDDuy6YsPE9GOPoR5ldV9NWNl00tmkxdRvXuMA==
-                match = /X-Amz-Cf-Id:\s+(.*)/.exec(headers);
+                match_rid = /X-Amz-Cf-Id:\s+(.*)/.exec(headers);
                 //console.log(match);
-                if (match) {
-                    if (2 === match.length) {
-                        report('s', match[1]);
-                        return;
+                if (match_server) {
+                    if (2 === match_server.length) {
+                        p1 = match_server[1];
                     }
+                }
+                if (match_rid) {
+                    if (2 === match_rid.length) {
+                        p2 = match_rid[1];
+                    }
+                }
+                if (p1 && p2) {
+                    match = p1 + '@' + p2;
+                    report('s', match);
+                    return;
+                } else if (p1) {
+                    report('s', p1);
+                    return;
+                } else if (p2) {
+                    report('s', p2);
+                    return;
                 }
             }
             report('e');
