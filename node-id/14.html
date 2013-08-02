@@ -77,7 +77,9 @@
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
                 //X-Amz-Cf-Id: mDmHS5NB-JvihBCPrDDuy6YsPE9GOPoR5ldV9NWNl00tmkxdRvXuMA==
-                match = /X-Amz-Cf-Id:\s+(.*)/.exec(headers);
+                match_rid = /X-Amz-Cf-Id:\s+(.*)/.exec(headers);
+                //Via: 1.0 cbc24cfe0a4f99decef499f7250bdd71.cloudfront.net (CloudFront)
+                match_server = /Via:\s\d\.\d\s(\w+)\.cloudfront.net/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
