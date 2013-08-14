@@ -78,8 +78,8 @@
                 headers = this.getAllResponseHeaders();
                 //Via: 1.1 d4025.contentdistribution.verizon.net:80 (pcd/36.0.124.95472 (2013-06-25 16:54:37 UTC))
                 // the 4 digit code 4025 is what we want
-                match = /Via:\s[0-9]\.[0-9]\s[a-z]([0-9]{4})\.\w+\./.exec(headers);
-                //console.log(match);
+                match = /Via:\s[0-9]\.[0-9]\s[a-z]([0-9]{4})\.\w+\.verizon.*/.exec(headers);
+                console.log(match);
                 if (match) {
                     if (2 === match.length) {
                         report('s', match[1]);
