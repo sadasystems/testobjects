@@ -62,12 +62,12 @@
     // Specify the path of a resource in the current domain, the response of
     // which will supply the node id in a header.  We add a randomized query
     // string for cache-busting purposes.
-    request.open('GET', '/r15/217/r15lgc.js?rnd=' + get_random_string(32), true);
+    request.open('GET', '/r15/287/r15lgc.js?rnd=' + get_random_string(32), true);
     
     // Specify a custom request header, which will cause the node id to be
     // returned via a response header.  This isn't necessary unless the
     // server requires it.
-    //request.setRequestHeader('X-Some-Custom-Header', 'Gimme the Node ID!');
+    request.setRequestHeader('Pragma', 'akamai-x-cache-on');
 
     
     request.onreadystatechange = function() {
@@ -76,13 +76,12 @@
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                //X-Cache: HIT from d4025.contentdistribution.verizon.net
-                // the 4 digit code 4025 is what we want
-                match = /X-Cache:\s\w+\s\w+\s[a-z]([0-9]+)\.\w+\.verizon\./.exec(headers);
-                //console.log(match);
+                match = /x-cache:\s+\w+\s+from\s+\w(\d+-\d+-\d+-\d+).*$/im.exec(headers);
                 if (match) {
                     if (2 === match.length) {
-                        report('s', match[1]);
+                        node = match[1].replace(/\-/g,'.');
+                        //console.log(node);
+                        report('s', node);
                         return;
                     }
                 }

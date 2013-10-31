@@ -78,7 +78,7 @@
                 headers = this.getAllResponseHeaders();
                 //X-Cache: MISS from cdce-dal003-001.dal003.internap.com
                 match = /X-Cache:\s+[A-Z]{3,4}\s+from\s+\w+\-\w+\-\w+\.([a-z0-9]+)\.internap\.com/.exec(headers);
-                console.log(match);
+                //console.log(match);
                 if (match) {
                     if (2 === match.length) {
                         report('s', match[1]);
