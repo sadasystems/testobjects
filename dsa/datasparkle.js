@@ -2,7 +2,7 @@
   'use strict';
   window.addEventListener('load', function() {
     new Header({
-      source: 'test.txt',
+      source: 'test.js',
       container: document.getElementById('header'),
       opacityRange: [0.1, 0.2],
       gridSize: 10,
