@@ -12,4 +12,9 @@ Creates a JavaScript test object, padded to the to the desired number of bytes.
 
 Example::
 
-    ./generate_padded_javascript_test_object.py --length 2048 --output-dir /tmp
+    ./generate_padded_javascript_test_object.py --length 2 --output-dir /tmp
+    Namespace(length=2, output_dir='/tmp', prefix='r15lgc-')
+    Template length: 174
+    Padding length: 1880
+    Output length: 2048 bytes
+    File written to: /tmp/r15lgc-2KB.js
