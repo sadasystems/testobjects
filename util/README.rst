@@ -8,7 +8,7 @@ Scripts
 generate_padded_javascript_test_object.py
 -----------------------------------------
 
-Creates a JavaScript test object, padded to the to the desired number of bytes.
+Creates a JavaScript test object, padded to the desired number of kilobytes.
 
 Example::
 
