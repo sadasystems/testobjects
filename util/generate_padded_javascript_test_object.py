@@ -38,6 +38,7 @@ def main():
     print('Template length:', template_length)
     # Add 2 for the placeholders and 4 for the extra brackets
     padding_length = file_length_in_bytes - template_length + 6
+    print('Minus 6 extra placeholder and escape characters')
     print('Padding length:', padding_length)
     alphabet = string.ascii_letters + string.digits
     padding = ''.join(random.choice(alphabet) for i in range(padding_length))
