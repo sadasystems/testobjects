@@ -24,6 +24,7 @@ def main():
     arg_parser = argparse.ArgumentParser()
 
     arg_parser.add_argument('--length', '-l', type=int, required=True, help='Resulting file length in kilobytes')
+    arg_parser.add_argument('--units', '-u', choices=['kilobytes', 'bytes'], default='kilobytes')
     arg_parser.add_argument('--output-dir', '-d', default=tempfile.gettempdir())
     arg_parser.add_argument('--prefix', '-p', default='r15lgc-')
 
@@ -32,8 +33,12 @@ def main():
 
     file_length_in_bytes = args.length * 1024
     output_file = '{}{}KB.js'.format(args.prefix, args.length)
-    output_file = os.path.join(args.output_dir, output_file)
 
+    if 'bytes' == args.units:
+        file_length_in_bytes = args.length
+        output_file = '{}{}B.js'.format(args.prefix, args.length)
+
+    output_file = os.path.join(args.output_dir, output_file)
     template_length = len(template)
     print('Template length:', template_length)
     # Add 2 for the placeholders and 4 for the extra brackets
