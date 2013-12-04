@@ -78,10 +78,10 @@
                 headers = this.getAllResponseHeaders();
                 //Via: http/1.1 odol-atsmid-cen-05.elmhurst.il.chicago.comcast.net (ApacheTrafficServer/3.2.0 [uIcHs f p eN:t cCNi p s ]), http/1.1 odol-atsec-hou-04.bearcreek.tx.houston.comcast.net (ApacheTrafficServer/3.2.0 [uScHs f p eN:t cCHi p s ])
                 match = /Via: http\/\d\.\d\s([a-z\-0-9]+)[\.a-z]+\s+.*http\/\d\.\d\s([a-z\-0-9]+)[\.a-z]+\s+/.exec(headers);
-                console.log(match);
+                //console.log(match);
                 if (match) {
                     if (3 === match.length) {
-                        var toreturn = match[1] + match[2]
+                        var toreturn = match[1] + '+' + match[2]
                         report('s', toreturn);
                         return;
                     }
