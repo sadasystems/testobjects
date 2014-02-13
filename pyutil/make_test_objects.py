@@ -11,12 +11,12 @@ import os
 import subprocess
 import re
 import logging
+import urllib.request
 
 logger = logging.getLogger(__name__)
 
 import common
 import common.errors
-import common.compression
 
 def create_output(padding):
 
@@ -123,6 +123,7 @@ def create_output(padding):
 def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--output-dir', '-d')
+    arg_parser.add_argument('--test-domain', '-t', default='testobjects.cedexis.localhost')
     arg_parser.add_argument(
         '--verbose',
         '-v',
@@ -133,37 +134,53 @@ def main():
     args = arg_parser.parse_args()
     common.configure_logging(args.verbose)
 
-    output_dir = common.get_test_objects_dir('r16')
+    root_dir = common.get_test_objects_dir('r16')
     if not args.output_dir is None:
-        output_dir = args.output_dir
+        root_dir = args.output_dir
 
-    # These are multiples of 1024
-    # For historical reasons, what we're calling kilobytes here are really
-    # kibibytes (i.e. we screwed up historically)
+    # `multiple` are multiples of 1024
     file_sizes = [
         None,
         {
             'multiple': 2,
             'padding_file': 'padding-200K.txt',
-            'compressors': [
-                (common.compression.identity_compressor, int(9.35e2)),
-                (common.compression.gzip_compressor, int(1.1e3)),
+            'requests': [
+                {
+                    'compression_type': 'identity',
+                    'padding_start_size': int(9.35e2),
+                },
+                {
+                    'compression_type': 'gzip',
+                    'padding_start_size': int(1.145e3),
+                },
             ]
         },
         {
             'multiple': 15,
             'padding_file': 'padding-200K.txt',
-            'compressors': [
-                (common.compression.identity_compressor, int(6.313e3)),
-                (common.compression.gzip_compressor, int(9.31e3)),
+            'requests': [
+                {
+                    'compression_type': 'identity',
+                    'padding_start_size': int(6.313e3),
+                },
+                {
+                    'compression_type': 'gzip',
+                    'padding_start_size': int(8.93e3),
+                },
             ]
         },
         {
             'multiple': 100,
             'padding_file': 'padding-200K.txt',
-            'compressors': [
-                (common.compression.identity_compressor, int(4.214e4)),
-                (common.compression.gzip_compressor, int(6.629e4)),
+            'requests': [
+                {
+                    'compression_type': 'identity',
+                    'padding_start_size': int(4.2141e4),
+                },
+                {
+                    'compression_type': 'gzip',
+                    'padding_start_size': int(6.4728e4),
+                },
             ]
         }
     ]
@@ -172,47 +189,71 @@ def main():
         for file_size_info in file_sizes:
             if file_size_info is None:
                 logger.info('Producing small test object')
-                output_file = os.path.join(output_dir, 'r16lgc.min.js')
+                output_file_path = os.path.join(root_dir, 'r16.min.js')
                 output = create_output(None)
-                with open(output_file, 'w') as fp:
+                with open(output_file_path, 'w') as fp:
                     fp.write(output)
-                logger.info('File written to: %s', output_file)
+                logger.info('File written to: %s', output_file_path)
             else:
 
                 with open(common.padding_file_path(file_size_info['padding_file'])) as fp:
                     padding = fp.read()
 
                 size_in_bytes = 1024 * file_size_info['multiple']
-                for compressor, starting_padding_size in file_size_info['compressors']:
-                    output_file_name = 'r16lgc-{}KB.{}.min.js'.format(file_size_info['multiple'], compressor.compressor_name)
-                    logger.info('Producing file: %s', output_file_name)
+                for request_info in file_size_info['requests']:
+                    output_file_name = 'r16-{}KB.min.js'.format(file_size_info['multiple'])
+                    output_subdir = os.path.join(root_dir, request_info['compression_type'])
+                    output_file_path = os.path.join(output_subdir, output_file_name)
+                    if not os.path.isdir(output_subdir):
+                        os.makedirs(output_subdir)
+                    if os.path.isfile(output_file_path):
+                        os.unlink(output_file_path)
+                    logger.info('Producing file: %s', output_file_path)
                     logger.debug('Targeting compressed size: %s', size_in_bytes)
                     compressed_length = 0
-                    current_padding_length = starting_padding_size
+                    current_padding_length = request_info['padding_start_size']
                     offset = 0
                     while compressed_length != size_in_bytes:
                         logger.debug('Current padding length: %s', current_padding_length)
                         current_padding = padding[offset:current_padding_length + offset]
                         output = create_output(current_padding)
                         logger.log(5, 'Current output:\n%s', output)
-                        compressed_length = compressor.get_compressed_length(output, output_file_name)
-                        logger.debug('Compressed length: %s', compressed_length)
 
-                        if compressed_length < size_in_bytes:
+                        # Write the candidate file
+                        with open(output_file_path, 'w') as f:
+                            f.write(output)
+
+                        # Now download it and make sure it's the right size
+                        url = 'http://{}/r16/{}/{}'.format(args.test_domain, request_info['compression_type'], output_file_name)
+                        request_headers = {}
+                        if 'gzip' == request_info['compression_type']:
+                            request_headers['Accept-Encoding'] = 'gzip, deflate'
+                        request = urllib.request.Request(url, headers=request_headers)
+                        response = urllib.request.urlopen(request)
+                        response_text = response.read()
+                        logger.debug('Length of response: %s', len(response_text))
+
+                        if len(response_text) < size_in_bytes:
                             current_padding_length += 1
-                        elif compressed_length > size_in_bytes:
+                        elif len(response_text) > size_in_bytes:
                             # We've gone over a bit.
                             # Start over but from 1 character further along
-                            current_padding_length = starting_padding_size
+                            current_padding_length = request_info['padding_start_size']
                             offset += 1
                             logger.debug('Unable to arrive at exact file size. Starting over with offset=%s', offset)
+                        else:
+                            break
 
-                    output_file = os.path.join(output_dir, output_file_name)
-                    with open(output_file, 'w') as fp:
-                        fp.write(output)
-                    logger.info('File written to: %s', output_file)
+                    #output_file = os.path.join(output_dir, compressor.compressor_name)
+                    #if not os.path.isdir(output_file):
+                    #    os.makedirs(output_file)
+                    #output_file = os.path.join(output_file, output_file_name)
+                    #with open(output_file, 'w') as fp:
+                    #    fp.write(output)
+                    #logger.info('File written to: %s', output_file)
     except common.errors.InvalidJavaScriptError as e:
         logger.error('Exception: %r', e)
+        raise
 
 if __name__ == '__main__':
     print(sys.version)

@@ -1,0 +1,33 @@
+server {
+    listen 80;
+
+    server_name testobjects.cedexis.wildlemur.com;
+
+    location /r16 {
+        alias /home/jacob/repos/cedexis/testobjects/r16;
+
+        types {
+            application/javascript js;
+        }
+    }
+
+    location /r16/identity {
+        alias /home/jacob/repos/cedexis/testobjects/r16/identity;
+
+        types {
+            "application/javascript; charset=utf-8" js;
+        }
+    }
+
+    location /r16/gzip {
+        alias /home/jacob/repos/cedexis/testobjects/r16/gzip;
+
+        types {
+            "application/javascript; charset=utf-8" js;
+        }
+
+        gzip on;
+        gzip_types "application/javascript; charset=utf-8";
+        gzip_comp_level 1;
+    }
+}
