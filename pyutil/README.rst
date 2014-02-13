@@ -54,17 +54,18 @@ Test Objects
 ------------
 
 Test objects are produced using the pyutil/make_test_objects.py script.  The script
-specifies which compressed file sizes to produce, as well as which padding file to
-draw from and what padding start size to use.  The padding start size is tuned
+specifies 1) which large object file sizes to produce, 2) which padding file to
+draw from and 3) what padding start size to use.  The padding start size is tuned
 to make the script run as fast as possible.  Since it creates new test files iteratively
 and downloads them to test the size, the script can take a while to run if the padding
 start size isn't pretty close to the amount needed.  But be careful that the padding
 start size isn't greater than the amount needed, or else the script will run *forever*.
 
-For each target file size, the script produces two files.  One where the target size
-matches the download size when requested of nginx with "Accept-Encoding: gzip, deflate",
-and one where the target size matches the download size when no Accept-Encoding header
-is sent.  The latter is known as the "identity" file.
+For each target file size, the script produces a .js file and a .gz file.  Each
+should be exactly the target download size.  Nginx will be configured using
+the `gzip static module <http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html>`_
+to serve the .gz file directly when the request includes an
+"Accept-Encoding: gzip, deflate" header.  Otherwise it will serve the .js file.
 
 We can support new compression types by simply extending this mechanism.
 

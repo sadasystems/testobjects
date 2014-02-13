@@ -1,3 +1,0 @@
-# Avoid accidentally committing compressed test files
-*.gz
-

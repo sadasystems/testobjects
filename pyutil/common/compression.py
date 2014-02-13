@@ -4,42 +4,40 @@ import logging
 import tempfile
 import os
 import subprocess
+import shutil
 
 logger = logging.getLogger(__name__)
 
 class Compressor(object):
 
-    def __init__(self, compressor_name, get_compressed_length_fn):
+    def __init__(self, compressor_name, generate_compressed_file_fn):
         self.__compressor_name = compressor_name
-        self.__get_compressed_length_fn = get_compressed_length_fn
+        self.__generate_compressed_file_fn = generate_compressed_file_fn
 
     @property
     def compressor_name(self):
         return self.__compressor_name
 
-    def get_compressed_length(self, value, filename):
-        return self.__get_compressed_length_fn(value, filename)
+    def generate_compressed_file(self, content, target_dir, source_file_name):
+        return self.__generate_compressed_file_fn(content, target_dir, source_file_name)
 
-def get_compressed_length_identity(value, filename):
-    tempfile_path = os.path.join(tempfile.gettempdir(), filename)
-    try:
-        with open(tempfile_path, 'w') as f:
-            f.write(value)
-        return os.path.getsize(tempfile_path)
-    finally:
-        os.unlink(tempfile_path)
+def generate_compressed_identity(content, target_dir, source_file_name):
+    # For identity, we just write the file without compression
+    output_file_path = os.path.join(target_dir, source_file_name)
+    with open(output_file_path, 'w') as f:
+        f.write(content)
 
-def get_compressed_length_gzip(value, filename):
-    tempfile_path = os.path.join(tempfile.gettempdir(), filename)
+def generate_compressed_gzip(content, target_dir, source_file_name):
+    # Produce a gzipped file and move it to output_file_path
+    tempfile_path = os.path.join(tempfile.gettempdir(), source_file_name)
     tempfile_path_compressed = tempfile_path + '.gz'
-    try:
-        with open(tempfile_path, 'w') as f:
-            f.write(value)
-        args = [ 'gzip', '-9', tempfile_path ]
-        subprocess.check_call(args)
-        return os.path.getsize(tempfile_path_compressed)
-    finally:
-        os.unlink(tempfile_path_compressed)
+    with open(tempfile_path, 'w') as f:
+        f.write(content)
+    subprocess.check_call([ 'gzip', '-f', tempfile_path ])
+    output_file_path = os.path.join(target_dir, os.path.basename(tempfile_path_compressed))
+    if os.path.exists(output_file_path):
+        os.unlink(output_file_path)
+    shutil.move(tempfile_path_compressed, target_dir)
 
-gzip_compressor = Compressor('gzip', get_compressed_length_gzip)
-identity_compressor = Compressor('identity', get_compressed_length_identity)
+identity_compressor = Compressor('identity', generate_compressed_identity)
+gzip_compressor = Compressor('gzip', generate_compressed_gzip)

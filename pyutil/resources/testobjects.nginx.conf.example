@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name testobjects.cedexis.wildlemur.com;
+    server_name testobjects.cedexis.localhost;
 
     location /r16 {
         alias /home/jacob/repos/cedexis/testobjects/r16;
@@ -11,23 +11,13 @@ server {
         }
     }
 
-    location /r16/identity {
-        alias /home/jacob/repos/cedexis/testobjects/r16/identity;
-
-        types {
-            "application/javascript; charset=utf-8" js;
-        }
-    }
-
-    location /r16/gzip {
-        alias /home/jacob/repos/cedexis/testobjects/r16/gzip;
+    location /r16/large {
+        alias /home/jacob/repos/cedexis/testobjects/r16/large;
 
         types {
             "application/javascript; charset=utf-8" js;
         }
 
-        gzip on;
-        gzip_types "application/javascript; charset=utf-8";
-        gzip_comp_level 1;
+        gzip_static on;
     }
 }
