@@ -23,9 +23,13 @@ the current character if it would produce a string with no repeated reversible
 sequences of a certain width (referred to as the "window" size).  It continues
 until it has produced a string of the length chosen by the user.
 
-This script takes 2 required arguments: --length/-l and --window/-w.  It writes
-the result to a file in the computer's temporary files directory, which, if
-satisfactory, the user should manually copy to the pyutil/resources directory
+This script takes 2 required arguments:
+
+- --length/-l
+- --window/-w
+
+It writes the result to a file in the computer's temporary files directory which,
+if satisfactory, the user should manually copy to the pyutil/resources directory
 and rename with the appropriate character count.  The character count can be
 verified with the wc command using the -m switch, e.g.::
 
@@ -35,44 +39,32 @@ verified with the wc command using the -m switch, e.g.::
 There is currently only a 200K character padding file because that's all we
 need to create test objects <= 100KB in size.  It was created using a window
 of 2.  If we need larger large test objects, then it may be necessary to create
-larger padding files, which may require larger a alphabet and/or window.
+larger padding files, which may require a larger alphabet and/or window.  The
+script will tell you if there is no solution given the current parameters.
 
-+------------------+-----------------------+--------------------------------+
-| Name             | Window                | Used By                        |
-+==================+=======================+================================+
-| padding-200K.txt | 2                     | - r16lgc-100KB.gzip.min.js     |
-|                  |                       | - r16lgc-100KB.identity.min.js |
-|                  |                       | - r16lgc-15KB.gzip.min.js      |
-|                  |                       | - r16lgc-15KB.identity.min.js  |
-|                  |                       | - r16lgc-2KB.gzip.min.js       |
-|                  |                       | - r16lgc-2KB.identity.min.js   |
-+------------------+-----------------------+--------------------------------+
++------------------+-----------------------+------------------------+
+| Name             | Window                | Used By                |
++==================+=======================+========================+
+| padding-200K.txt | 2                     | - r16-100KB.min.js     |
+|                  |                       | - r16-15KB.min.js      |
+|                  |                       | - r16-2KB.min.js       |
++------------------+-----------------------+------------------------+
 
 Test Objects
 ------------
 
 Test objects are produced using the pyutil/make_test_objects.py script.  The script
 specifies which compressed file sizes to produce, as well as which padding file to
-draw from and what starting padding size to use.  The starting padding size is tuned
-to make the script run as fast as possible.  Since it creates a lot of temporary files
-and gzips them to test the size, the script can take a while to run if these aren't
-tuned.
+draw from and what padding start size to use.  The padding start size is tuned
+to make the script run as fast as possible.  Since it creates new test files iteratively
+and downloads them to test the size, the script can take a while to run if the padding
+start size isn't pretty close to the amount needed.  But be careful that the padding
+start size isn't greater than the amount needed, or else the script will run *forever*.
 
 For each target file size, the script produces two files.  One where the target size
-matches the resulting file after being gzipped at level 9 (because that's what how
-we compress them in production), and one where the target size matches the actual file
-size (known as the "identity" file).  These are distinguished by filename.  For example,
-for the 100KB test object, we have the following two files::
-
-    jacob@sequoia:~/repos/cedexis/testobjects/r16$ ll | grep 100KB
-    -rw-r--r--  1 jacob jacob 161024 Feb 12 12:27 r16lgc-100KB.gzip.min.js
-    -rw-r--r--  1 jacob jacob 102400 Feb 12 12:27 r16lgc-100KB.identity.min.js
-
-Gzipping the gzip.min.js version produces a file of exactly the right size::
-
-    jacob@sequoia:~/repos/cedexis/testobjects/r16$ gzip -9 r16lgc-100KB.gzip.min.js 
-    jacob@sequoia:~/repos/cedexis/testobjects/r16$ ll | grep 100KB.gzip
-    -rw-r--r--  1 jacob jacob 102400 Feb 12 12:27 r16lgc-100KB.gzip.min.js.gz
+matches the download size when requested of nginx with "Accept-Encoding: gzip, deflate",
+and one where the target size matches the download size when no Accept-Encoding header
+is sent.  The latter is known as the "identity" file.
 
 Verbosity
 ---------
