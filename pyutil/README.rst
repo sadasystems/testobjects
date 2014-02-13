@@ -14,7 +14,7 @@ the filename indicates how many Unicode characters the file contains.
 
 These are generated using the pyutil/make_padding_file.py script.  This script
 constructs an alphabet that it uses to generate the long string.  This is
-based on Unicode code point ranges found in the script, currently over 2000
+based on Unicode `code point ranges <common/padding.py#L18>`_ found in the script, currently over 2000
 characters long, but easily extended.  The larger the alphabet, the easier it
 is for the script to produce a result.
 
