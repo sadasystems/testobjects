@@ -66,6 +66,8 @@ matches the download size when requested of nginx with "Accept-Encoding: gzip, d
 and one where the target size matches the download size when no Accept-Encoding header
 is sent.  The latter is known as the "identity" file.
 
+We can support new compression types by simply extending this mechanism.
+
 Verbosity
 ---------
 
