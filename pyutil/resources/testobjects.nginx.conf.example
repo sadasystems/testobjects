@@ -7,14 +7,6 @@ server {
         alias /home/jacob/repos/cedexis/testobjects/r16;
 
         types {
-            application/javascript js;
-        }
-    }
-
-    location /r16/large {
-        alias /home/jacob/repos/cedexis/testobjects/r16/large;
-
-        types {
             "application/javascript; charset=utf-8" js;
         }
 

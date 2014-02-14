@@ -197,14 +197,8 @@ def main():
                 if os.path.exists(output_file_path):
                     os.unlink(output_file_path)
                 output = create_output(None)
-                with open(output_file_path, 'w') as fp:
-                    fp.write(output)
-                logger.info('File written to: %s', output_file_path)
+                common.compression.identity_compressor.generate_compressed_file(output, root_dir, 'r16.min.js')
             else:
-                large_object_subdir = os.path.join(root_dir, 'large')
-                if not os.path.isdir(large_object_subdir):
-                    os.makedirs(large_object_subdir)
-
                 size_in_bytes = 1024 * file_size_info['multiple']
                 for compressor_info in file_size_info['compressors']:
                     source_file_name = 'r16-{}KB.min.js'.format(file_size_info['multiple'])
@@ -221,10 +215,10 @@ def main():
                         logger.log(5, 'Current output:\n%s', output)
 
                         # Write the candidate file
-                        compressor_info['compressor'].generate_compressed_file(output, large_object_subdir, source_file_name)
+                        compressor_info['compressor'].generate_compressed_file(output, root_dir, source_file_name)
 
                         # Now download it and make sure it's the right size
-                        url = 'http://{}/r16/large/{}'.format(args.test_domain, source_file_name)
+                        url = 'http://{}/r16/{}'.format(args.test_domain, source_file_name)
                         request_headers = {}
                         if 'gzip' == compressor_info['compressor'].compressor_name:
                             request_headers['Accept-Encoding'] = 'gzip, deflate'
