@@ -147,12 +147,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(9.35e2),
+                    'padding_start_size': int(9.351e2),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(1.105e3),
+                    'padding_start_size': int(1.112e3),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
@@ -167,7 +167,7 @@ def main():
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(9.31e3),
+                    'padding_start_size': int(9.32e3),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
@@ -177,12 +177,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(4.2141e4),
+                    'padding_start_size': int(4.214e4),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(6.63e4),
+                    'padding_start_size': int(6.631e4),
                     'padding_file': 'padding-200K.txt',
                 },
             ]

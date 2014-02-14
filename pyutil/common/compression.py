@@ -33,7 +33,7 @@ def generate_compressed_gzip(content, target_dir, source_file_name):
     tempfile_path_compressed = tempfile_path + '.gz'
     with open(tempfile_path, 'w') as f:
         f.write(content)
-    subprocess.check_call([ 'gzip', '-f', tempfile_path ])
+    subprocess.check_call([ 'gzip', '-f', '-n', tempfile_path ])
     output_file_path = os.path.join(target_dir, os.path.basename(tempfile_path_compressed))
     if os.path.exists(output_file_path):
         os.unlink(output_file_path)
