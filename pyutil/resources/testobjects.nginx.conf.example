@@ -5,11 +5,6 @@ server {
 
     location /r16 {
         alias /home/jacob/repos/cedexis/testobjects/r16;
-
-        types {
-            "application/javascript; charset=utf-8" js;
-        }
-
         gzip_static on;
     }
 }
