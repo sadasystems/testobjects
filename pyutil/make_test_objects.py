@@ -32,7 +32,6 @@ def create_output(padding):
                 return index
 
     expected_error_expressions = [
-        "Unused 'a'.",
         "Do not wrap function literals in parens unless they are to be immediately invoked.",
     ]
 
@@ -57,7 +56,7 @@ def create_output(padding):
     function_with_padding = [
         '(function() {',
         '    var a = ',
-        "    a += 'b';",
+        "    (function() { return; }(a));",
         '});',
         '',
     ]
@@ -147,12 +146,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(9.351e2),
+                    'padding_start_size': int(9.88e2),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(1.112e3),
+                    'padding_start_size': int(1.139e3),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
@@ -162,12 +161,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(6.31e3),
+                    'padding_start_size': int(6.213e3),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(9.32e3),
+                    'padding_start_size': int(9.226e3),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
@@ -177,12 +176,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(4.214e4),
+                    'padding_start_size': int(4.178e4),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(6.631e4),
+                    'padding_start_size': int(6.611e4),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
