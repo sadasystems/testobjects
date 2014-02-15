@@ -32,39 +32,43 @@ def create_output(padding):
                 return index
 
     expected_error_expressions = [
-        "Do not wrap function literals in parens unless they are to be immediately invoked.",
+        'Do not wrap function literals in parens',
     ]
 
     js_lines = [
         '/*! Copyright 2014 Cedexis Inc. */',
         '',
         '/*jslint',
-        '   sloppy: true',
-        '   white: true',
-        '   browser: true',
+        '    sloppy: true',
+        '    white: true',
+        '    browser: true',
+        '*/',
+        '',
+        '/*globals',
+        '    cedexis',
         '*/',
         '',
         '(function() {',
-        '   if (undefined !== window.radar) {',
-        '       window.radar.stoppedAt = new Date();',
+        '   if (cedexis && cedexis.radar) {',
+        '       cedexis.radar.stopped_at = new Date();',
         '   }',
         '}());',
         '',
     ]
 
     # Add padding
-    function_with_padding = [
+    exloded_padding_parts = [
         '(function() {',
-        '    var a = ',
-        "    (function() { return; }(a));",
+        '    var munge_me = ',
+        "    (function() { return; }(munge_me));",
         '});',
         '',
     ]
     if not padding is None:
-        function_with_padding[1] += "'"
-        function_with_padding[1] += padding
-        function_with_padding[1] += "';"
-        js_lines.extend(function_with_padding)
+        exloded_padding_parts[1] += "'"
+        exloded_padding_parts[1] += padding
+        exloded_padding_parts[1] += "';"
+        js_lines.extend(exloded_padding_parts)
 
     result = '\n'.join(js_lines)
 
@@ -102,7 +106,6 @@ def create_output(padding):
             common.yuicompressor_path(),
             '--type',
             'js',
-            '--nomunge',
             '-o',
             tempfile_path_minified,
             tempfile_path,
@@ -146,12 +149,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(9.88e2),
+                    'padding_start_size': int(9.86e2),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(1.139e3),
+                    'padding_start_size': int(1.14e3),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
@@ -161,12 +164,12 @@ def main():
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(6.213e3),
+                    'padding_start_size': int(6.214e3),
                     'padding_file': 'padding-200K.txt',
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(9.226e3),
+                    'padding_start_size': int(9.227e3),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
@@ -181,7 +184,7 @@ def main():
                 },
                 {
                     'compressor': common.compression.gzip_compressor,
-                    'padding_start_size': int(6.611e4),
+                    'padding_start_size': int(6.612e4),
                     'padding_file': 'padding-200K.txt',
                 },
             ]
