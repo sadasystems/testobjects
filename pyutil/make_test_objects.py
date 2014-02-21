@@ -73,8 +73,8 @@ def create_output(padding):
     result = '\n'.join(js_lines)
 
     # Run jslint on the output
-    tempfile_handle, tempfile_path = tempfile.mkstemp(suffix='.js')
-    tempfile_handle_minified, tempfile_path_minified = tempfile.mkstemp(suffix='.min.js')
+    tempfile_handle, tempfile_path = tempfile.mkstemp(suffix='.unmin.js')
+    tempfile_handle_minified, tempfile_path_minified = tempfile.mkstemp(suffix='.js')
     try:
         logger.debug('Writing to temp file: %s', tempfile_path)
         with open(tempfile_path, 'w') as f:
@@ -146,6 +146,7 @@ def main():
         None,
         {
             'multiple': 2,
+            'prefix': 'r16',
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
@@ -161,6 +162,7 @@ def main():
         },
         {
             'multiple': 15,
+            'prefix': 'r16',
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
@@ -176,6 +178,7 @@ def main():
         },
         {
             'multiple': 100,
+            'prefix': 'r16xl',
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
@@ -195,15 +198,15 @@ def main():
         for file_size_info in file_sizes:
             if file_size_info is None:
                 logger.info('Producing small test object')
-                output_file_path = os.path.join(root_dir, 'r16.min.js')
+                output_file_path = os.path.join(root_dir, 'r16.js')
                 if os.path.exists(output_file_path):
                     os.unlink(output_file_path)
                 output = create_output(None)
-                common.compression.identity_compressor.generate_compressed_file(output, root_dir, 'r16.min.js')
+                common.compression.identity_compressor.generate_compressed_file(output, root_dir, 'r16.js')
             else:
                 size_in_bytes = 1024 * file_size_info['multiple']
                 for compressor_info in file_size_info['compressors']:
-                    source_file_name = 'r16-{}KB.min.js'.format(file_size_info['multiple'])
+                    source_file_name = '{}-{}KB.js'.format(file_size_info['prefix'], file_size_info['multiple'])
                     logger.info('Producing %s file of %s bytes', compressor_info['compressor'].compressor_name, size_in_bytes)
                     compressed_length = 0
                     current_padding_length = compressor_info['padding_start_size']

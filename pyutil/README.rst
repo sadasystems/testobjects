@@ -45,9 +45,9 @@ script will tell you if there is no solution given the current parameters.
 +------------------+-----------------------+------------------------+
 | Name             | Window                | Used By                |
 +==================+=======================+========================+
-| padding-200K.txt | 2                     | - r16-100KB.min.js     |
-|                  |                       | - r16-15KB.min.js      |
-|                  |                       | - r16-2KB.min.js       |
+| padding-200K.txt | 2                     | - r16-100KB.js     |
+|                  |                       | - r16-15KB.js      |
+|                  |                       | - r16-2KB.js       |
 +------------------+-----------------------+------------------------+
 
 Test Objects
