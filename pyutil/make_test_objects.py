@@ -19,7 +19,27 @@ import common
 import common.errors
 import common.compression
 
-def create_output(padding):
+root_dir = common.get_test_objects_dir('r16')
+
+def create_dsa_output(padding):
+    lines = [
+        '<!DOCTYPE html>',
+        '<html>',
+        '<head>',
+        '<meta charset="utf-8"/>',
+        '<title>DSA Test Object</title>',
+        '</head>',
+        '<body>',
+        '<!-- Cedexis Inc.',
+        padding,
+        '-->',
+        '</body>',
+        '</html>',
+    ]
+
+    return ''.join(lines)
+
+def create_javascript_output(padding):
 
     def find_nth(source, substr, n):
         found = 0
@@ -123,7 +143,57 @@ def create_output(padding):
         os.unlink(tempfile_path)
         os.unlink(tempfile_path_minified)
 
+def generate_test_object(content_fn):
+    def _inner(file_size_info, compressor_info, test_domain):
+        with open(common.padding_file_path(compressor_info['padding_file'])) as fp:
+            padding = fp.read()
+        size_in_bytes = 1024 * file_size_info['multiple']
+
+        # Produce file name
+        if 'filename' in file_size_info:
+            source_file_name = file_size_info['filename']
+        elif 'prefix' in file_size_info:
+            source_file_name = '{}-{}KB.js'.format(file_size_info['prefix'], file_size_info['multiple'])
+        else:
+            raise NotImplementedError()
+        logger.info('Producing %s file of %s bytes', compressor_info['compressor'].compressor_name, size_in_bytes)
+        compressed_length = 0
+        current_padding_length = compressor_info['padding_start_size']
+        offset = 0
+        while compressed_length != size_in_bytes:
+            logger.debug('Current padding length: %s', current_padding_length)
+            current_padding = padding[offset:current_padding_length + offset]
+            output = content_fn(current_padding)
+            logger.log(5, 'Current output:\n%s', output)
+    
+            # Write the candidate file
+            compressor_info['compressor'].generate_compressed_file(output, root_dir, source_file_name)
+    
+            # Now download it and make sure it's the right size
+            url = 'http://{}/r16/{}'.format(test_domain, source_file_name)
+            request_headers = {}
+            if 'gzip' == compressor_info['compressor'].compressor_name:
+                request_headers['Accept-Encoding'] = 'gzip, deflate'
+            request = urllib.request.Request(url, headers=request_headers)
+            response = urllib.request.urlopen(request)
+            response_text = response.read()
+            logger.debug('Length of response: %s', len(response_text))
+    
+            if len(response_text) < size_in_bytes:
+                current_padding_length += 1
+            elif len(response_text) > size_in_bytes:
+                # We've gone over a bit.
+                # Start over but from 1 character further along
+                current_padding_length = compressor_info['padding_start_size']
+                offset += 1
+                logger.debug('Unable to arrive at exact file size. Starting over with offset=%s', offset)
+            else:
+                break
+
+    return _inner
+
 def main():
+    global root_dir
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--output-dir', '-d')
     arg_parser.add_argument('--test-domain', '-t', default='testobjects.cedexis.localhost')
@@ -137,7 +207,6 @@ def main():
     args = arg_parser.parse_args()
     common.configure_logging(args.verbose)
 
-    root_dir = common.get_test_objects_dir('r16')
     if not args.output_dir is None:
         root_dir = args.output_dir
 
@@ -147,6 +216,7 @@ def main():
         {
             'multiple': 2,
             'prefix': 'r16',
+            'generator_fn': generate_test_object(create_javascript_output),
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
@@ -163,6 +233,7 @@ def main():
         {
             'multiple': 15,
             'prefix': 'r16',
+            'generator_fn': generate_test_object(create_javascript_output),
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
@@ -179,6 +250,7 @@ def main():
         {
             'multiple': 100,
             'prefix': 'r16xl',
+            'generator_fn': generate_test_object(create_javascript_output),
             'compressors': [
                 {
                     'compressor': common.compression.identity_compressor,
@@ -191,7 +263,24 @@ def main():
                     'padding_file': 'padding-200K.txt',
                 },
             ]
-        }
+        },
+        {
+            'multiple': 15,
+            'filename': 'dbench.html',
+            'generator_fn': generate_test_object(create_dsa_output),
+            'compressors': [
+                {
+                    'compressor': common.compression.identity_compressor,
+                    'padding_start_size': int(5.5e3),
+                    'padding_file': 'padding-200K.txt',
+                },
+                {
+                    'compressor': common.compression.gzip_compressor,
+                    'padding_start_size': int(9e3),
+                    'padding_file': 'padding-200K.txt',
+                },
+            ]
+        },
     ]
 
     try:
@@ -201,47 +290,11 @@ def main():
                 output_file_path = os.path.join(root_dir, 'r16.js')
                 if os.path.exists(output_file_path):
                     os.unlink(output_file_path)
-                output = create_output(None)
+                output = create_javascript_output(None)
                 common.compression.identity_compressor.generate_compressed_file(output, root_dir, 'r16.js')
             else:
-                size_in_bytes = 1024 * file_size_info['multiple']
                 for compressor_info in file_size_info['compressors']:
-                    source_file_name = '{}-{}KB.js'.format(file_size_info['prefix'], file_size_info['multiple'])
-                    logger.info('Producing %s file of %s bytes', compressor_info['compressor'].compressor_name, size_in_bytes)
-                    compressed_length = 0
-                    current_padding_length = compressor_info['padding_start_size']
-                    offset = 0
-                    with open(common.padding_file_path(compressor_info['padding_file'])) as fp:
-                        padding = fp.read()
-                    while compressed_length != size_in_bytes:
-                        logger.debug('Current padding length: %s', current_padding_length)
-                        current_padding = padding[offset:current_padding_length + offset]
-                        output = create_output(current_padding)
-                        logger.log(5, 'Current output:\n%s', output)
-
-                        # Write the candidate file
-                        compressor_info['compressor'].generate_compressed_file(output, root_dir, source_file_name)
-
-                        # Now download it and make sure it's the right size
-                        url = 'http://{}/r16/{}'.format(args.test_domain, source_file_name)
-                        request_headers = {}
-                        if 'gzip' == compressor_info['compressor'].compressor_name:
-                            request_headers['Accept-Encoding'] = 'gzip, deflate'
-                        request = urllib.request.Request(url, headers=request_headers)
-                        response = urllib.request.urlopen(request)
-                        response_text = response.read()
-                        logger.debug('Length of response: %s', len(response_text))
-
-                        if len(response_text) < size_in_bytes:
-                            current_padding_length += 1
-                        elif len(response_text) > size_in_bytes:
-                            # We've gone over a bit.
-                            # Start over but from 1 character further along
-                            current_padding_length = compressor_info['padding_start_size']
-                            offset += 1
-                            logger.debug('Unable to arrive at exact file size. Starting over with offset=%s', offset)
-                        else:
-                            break
+                    file_size_info['generator_fn'](file_size_info, compressor_info, args.test_domain)
 
     except common.errors.InvalidJavaScriptError as e:
         logger.error('Exception: %r', e)

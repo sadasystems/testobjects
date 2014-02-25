@@ -24,6 +24,7 @@ class Compressor(object):
 def generate_compressed_identity(content, target_dir, source_file_name):
     # For identity, we just write the file without compression
     output_file_path = os.path.join(target_dir, source_file_name)
+    logger.debug('Output path: %s', output_file_path)
     with open(output_file_path, 'w') as f:
         f.write(content)
 
