@@ -76,8 +76,8 @@
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                //X-CF1: fF.lax1:cf:cacheB.lax1-01
-                match = /X-CF1:\s\w+\.(\w+):/.exec(headers);
+                //X-CF1: 14166:fC.fra2:cf:cacheB.fra2-v:H
+                match = /X-CF1:\s\d+:\w+\.(\w+):/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
