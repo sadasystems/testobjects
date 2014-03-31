@@ -267,14 +267,14 @@ def main():
         },
         {
             'multiple': 15,
-            'filename': 'dbench.html',
+            'filename': 'r16.html',
             'generator_fn': generate_test_object(create_dsa_output),
             'compressors': [
-                {
-                    'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(5.5e3),
-                    'padding_file': 'padding-200K.txt',
-                },
+                #{
+                #    'compressor': common.compression.identity_compressor,
+                #    'padding_start_size': int(5.5e3),
+                #    'padding_file': 'padding-200K.txt',
+                #},
                 {
                     'compressor': common.compression.gzip_compressor,
                     'padding_start_size': int(9e3),
