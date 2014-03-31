@@ -171,6 +171,7 @@ def generate_test_object(content_fn):
     
             # Now download it and make sure it's the right size
             url = 'http://{}/r16/{}'.format(test_domain, source_file_name)
+            logger.debug('Downloading %s', url)
             request_headers = {}
             if 'gzip' == compressor_info['compressor'].compressor_name:
                 request_headers['Accept-Encoding'] = 'gzip, deflate'
@@ -252,11 +253,11 @@ def main():
             'prefix': 'r16xl',
             'generator_fn': generate_test_object(create_javascript_output),
             'compressors': [
-                {
-                    'compressor': common.compression.identity_compressor,
-                    'padding_start_size': int(4.178e4),
-                    'padding_file': 'padding-200K.txt',
-                },
+                #{
+                #    'compressor': common.compression.identity_compressor,
+                #    'padding_start_size': int(4.178e4),
+                #    'padding_file': 'padding-200K.txt',
+                #},
                 {
                     'compressor': common.compression.gzip_compressor,
                     'padding_start_size': int(6.612e4),
