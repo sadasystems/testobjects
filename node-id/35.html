@@ -80,14 +80,15 @@
                 match_via = /Via:\s+[0-9]\.[0-9]\s+\w+\.(\w+)\./.exec(headers);
                 //Server: v/1.0.14/v5bom1-wwwx
                 match_server = /Server:\sv\/[0-9\.]+\/v[0-9]+(\w+)-\w+/.exec(headers);
-                //console.log(match);
+                //console.log(match_via);
+                //console.log(match_server);
                 if (match_via) {
                     //Old Style
                     if (2 === match_via.length) {
-                        report('s', match_server[1]);
+                        report('s', match_via[1]);
                         return;
                     }
-                } else {
+                } else if (match_server) {
                     //this is the new style, return that
                     if (2 === match_server.length) {
                         report('s', match_server[1]);
