@@ -76,8 +76,8 @@
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                //X-Cache: MISS from cdce-dal003-001.dal003.internap.com
-                match = /X-Cache:\s+[A-Z]{3,4}\s+from\s+\w+\-\w+\-\w+\.([a-z0-9]+)\.internap\.com/.exec(headers);
+                //X-INAP-Server: cdce-acs006-004.acs006.internap.com
+                match = /X-INAP-Server:\s+\w+\-\w+\-\w+\.([a-z0-9]+)\.internap\.com/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
