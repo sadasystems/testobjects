@@ -77,7 +77,7 @@
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
                 //Server: v/1.2.1/1.2.1/v1dfw1-www
-                match = /Server:\sv\/\d\.\d\.\d\/\d\.\d\.\d\/(\w\-\w)/.exec(headers);
+                match = /Server:.*\/(\w+\-\w+)/.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
