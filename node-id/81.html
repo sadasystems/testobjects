@@ -17,7 +17,7 @@
         provider_id = match[5],
         report,
         request;
-    
+
     report = function(status, node_id) {
         var result = {
             source: 'uni',
@@ -37,11 +37,11 @@
         }
         parent.postMessage(JSON.stringify(result), "*");
     };
-    
+
     get_random_number = function(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
-    
+
     get_random_string = function(result_length) {
         var alphabet = 'abcdefghijklmnopqrstuvwxyz', i, result = [];
         for (i = 0; i < result_length; i++) {
@@ -49,27 +49,26 @@
         }
         return result.join('');
     };
-    
+
     if ('undefined' === typeof XMLHttpRequest) {
         report('e');
         return;
     }
     request = new XMLHttpRequest();
-    
+
     // Report that the test object has loaded, so we kill the parent timer
     report('l');
-    
+
     // Specify the path of a resource in the current domain, the response of
     // which will supply the node id in a header.  We add a randomized query
     // string for cache-busting purposes.
-    request.open('GET', '/img/81/r17.gif?rnd=' + get_random_string(32), true);
-    
+    request.open('GET', '/r16/81/r16.js?rnd=' + get_random_string(32), true);
+
     // Specify a custom request header, which will cause the node id to be
     // returned via a response header.  This isn't necessary unless the
     // server requires it.
     request.setRequestHeader('Pragma', 'akamai-x-cache-on');
 
-    
     request.onreadystatechange = function() {
 
         var headers, match;
