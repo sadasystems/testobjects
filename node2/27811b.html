@@ -50,7 +50,9 @@
         return result.join('');
     };
 
-    if ('undefined' === typeof XMLHttpRequest) {
+    if ('undefined' === typeof XMLHttpRequest
+        || 'undefined' === typeof btoa
+        || 'undefined' === typeof encodeURIComponent) {
         report('e');
         return;
     }
@@ -77,7 +79,7 @@
                 match = /(^via:.*$)/im.exec(headers);
                 //console.log(match);
                 if (match && match[1]) {
-                    report('s', match[1]);
+                    report('s', encodeURIComponent(btoa(match[1])));
                     return;
                 }
             }
