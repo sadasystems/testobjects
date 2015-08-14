@@ -7,9 +7,8 @@
 </head>
 <body>
 <script>
-(function(a){function d(a){parent.postMessage(JSON.stringify(a),"*")}function g(){if(!e)switch(this.status){case 404:case 500:e=!0;d({cedexis:{cdnTesting:{hostname:location.hostname,provider:"Error"}}});break;case 200:if(4===this.readyState){e=!0;var a=this.getAllResponseHeaders();(a=/x-cdn-forward:\s*(\w+)$/im.exec(a))&&a[1]?d({cedexis:{cdnTesting:{hostname:location.hostname,provider:a[1]}}}):d({cedexis:{cdnTesting:{hostname:location.hostname,provider:"Unknown"}}})}break;default:console.log("Unexpected HTTP status: "+
-this.status)}}function h(a){for(var b="";a--;)b+="abcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(36*Math.random())+0);return b}if(a.XMLHttpRequest){a=location.search.slice(1).split("&");for(var f=a.length,b;f--;){var c=a[f].split("=");if(c&&c[1]&&"p"===c[0]){b=decodeURIComponent(c[1]);break}}b="//"+location.hostname+b+"?rnd="+h(24);a=new XMLHttpRequest;var e=!1;a&&(a.open("GET",b,!0),a.onreadystatechange=g,a.send())}})(window);
-
+(function(a){function f(){if(!d&&2===this.readyState){d=!0;var a={cedexis:{providerDetection:{hostname:location.hostname,httpStatus:this.status,headers:this.getAllResponseHeaders()}}};parent.postMessage(JSON.stringify(a),"*")}}function g(a){for(var b="";a--;)b+="abcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(36*Math.random())+0);return b}if(a.XMLHttpRequest){a=location.search.slice(1).split("&");for(var e=a.length,b;e--;){var c=a[e].split("=");if(c&&c[1]&&"p"===c[0]){b=decodeURIComponent(c[1]);
+break}}b="//"+location.hostname+b+"?rnd="+g(24);a=new XMLHttpRequest;var d=!1;a&&(a.open("GET",b,!0),a.onreadystatechange=f,a.send())}})(window);
 </script>
 </body>
 </html>
