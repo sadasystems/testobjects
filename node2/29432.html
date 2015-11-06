@@ -79,7 +79,7 @@
                     match = /(^x-via:.*$)/im.exec(headers);
                     //console.log(match);
                     if (match && match[1]) {
-                        report('s', encodeURIComponent(btoa(match[1])));
+                        report('s', encodeURIComponent('base64:' + btoa(match[1])));
                         return;
                     }
                 }
