@@ -30,7 +30,8 @@
             r: {
                 z: requestor_zone_id,
                 c: requestor_customer_id
-            }
+            },
+            encoded: false
         };
         if ('undefined' !== typeof node_id) {
             result.node_id = node_id;
@@ -50,9 +51,7 @@
         return result.join('');
     };
 
-    if ('undefined' === typeof XMLHttpRequest
-            || 'undefined' === typeof btoa
-            || 'undefined' === typeof encodeURIComponent) {
+    if ('undefined' === typeof XMLHttpRequest) {
         report('e');
         return;
     }
@@ -79,7 +78,7 @@
                 match = /(^x-via:.*$)/im.exec(headers);
                 //console.log(match);
                 if (match && match[1]) {
-                    report('s', encodeURIComponent('base64:' + btoa(match[1])));
+                    report('s', match[1]);
                     return;
                 }
             }
