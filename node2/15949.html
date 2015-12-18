@@ -76,8 +76,9 @@
                 var headers = this.getAllResponseHeaders();
                 var result = [];
                 var keepGoing = true;
+                var expr = /^x-hw:.*$/img;
                 while (keepGoing) {
-                    var match = /^x-hw:.*$/img.exec(headers);
+                    var match = expr.exec(headers);
                     if (match && match[0]) {
                         result.push(match[0]);
                     } else {
