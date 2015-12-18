@@ -74,10 +74,15 @@
         if (4 === this.readyState) {
             if (200 === this.status) {
                 var headers = this.getAllResponseHeaders();
-                var match = /^x-hw:.*$/img.exec(headers);
                 var result = [];
-                while (match) {
-                    result.push(match[0]);
+                var keepGoing = true;
+                while (keepGoing) {
+                    var match = /^x-hw:.*$/img.exec(headers);
+                    if (match && match[0]) {
+                        result.push(match[0]);
+                    } else {
+                        keepGoing = false;
+                    }
                 }
                 if (0 < result.length) {
                     report('s', result);
