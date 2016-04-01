@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Custom Node ID Test Object</title>
+</head>
+<body>
+<script>
+(function(){function c(e,a){var b={source:"uni",s:e,p:{z:f,c:g,i:h},r:{z:k,c:l}};"undefined"!==typeof a&&(b.node_id=a);parent.postMessage(JSON.stringify(b),"*")}var d,a;a=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search);var k=a[1],l=a[2],f=a[3],g=a[4],h=a[5],b;d=function(a,b){return Math.floor(Math.random()*(b-a+1))+a};a=function(a){var b,c=[];for(b=0;b<a;b++)c.push("abcdefghijklmnopqrstuvwxyz".charAt(d(0,25)));return c.join("")};"undefined"===typeof XMLHttpRequest||"undefined"===typeof btoa||
+"undefined"===typeof encodeURIComponent?c("e"):(b=new XMLHttpRequest,c("l"),b.open("GET","/img/451/r20.gif?rnd="+a(32),!0),b.setRequestHeader("X-LDebug","1"),b.onreadystatechange=function(){if(4===this.readyState){if(200===this.status){var a=this.getAllResponseHeaders().match(/x-cache:.*$/img);if(a&&0<a.length){c("s",encodeURIComponent(btoa(a.join("|"))));return}}c("e")}},b.send())})();
+</script>
+</body>
+</html>
