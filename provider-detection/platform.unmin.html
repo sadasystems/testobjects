@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test Platform</title>
+<meta charset="utf-8">
+</head>
+<body>
+<script>
+// ==ClosureCompiler==
+// @compilation_level ADVANCED_OPTIMIZATIONS
+// ==/ClosureCompiler==
+(function(window) {
+    var innerPath = getQueryStringArgument('p');
+    var zoneId = getQueryStringArgument('z');
+    var customerId = getQueryStringArgument('c');
+    if ('function' === typeof window['XMLHttpRequest']
+        && innerPath
+        && zoneId
+        && customerId) {
+        var url = "//" + window.location.hostname + innerPath + "?rnd=" + makeRandomString(24);
+        var request = new XMLHttpRequest();
+        if (request) {
+            var finished = false;
+            request.open('GET', url, true);
+            var requestHeaders = getQueryStringArgument('reqh');
+            if (requestHeaders) {
+                var decoded = JSON.parse(requestHeaders);
+                for (var i in decoded) {
+                    if (decoded.hasOwnProperty(i)) {
+                        request.setRequestHeader(i, decoded[i]);
+                    }
+                }
+            }
+            request.onreadystatechange = handleOnReadyStateChange;
+            request.send();
+        }
+    }
+
+    /**
+    * @param {string} argName
+    * @return {?string}
+    */
+    function getQueryStringArgument(argName) {
+        var parts = window.location.search.slice(1).split('&');
+        for (var i = 0; i < parts.length; i++) {
+            var pair = parts[i].split('=');
+            if (pair && pair[1] && argName === pair[0]) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @this {!XMLHttpRequest}
+     */
+    function handleOnReadyStateChange() {
+        if (!finished && 2 === this['readyState']) {
+            finished = true;
+            var data = {
+                'providerDetection': {
+                    'protocol': location.protocol,
+                    'hostname': location.hostname,
+                    'httpStatus': this.status,
+                    'headers': this.getAllResponseHeaders()
+                },
+                'zoneId': zoneId,
+                'customerId': customerId
+            };
+            var message = JSON.stringify({
+                'cedexis': data
+            });
+            window.parent.postMessage(message, "*");
+        }
+    }
+
+    /**
+    * @param {number} min
+    * @param {number} max
+    * @return {number}
+    */
+    function getRandomInt(min, max) {
+        return floor(random() * (max - min + 1)) + min;
+    }
+
+    /**
+    * @param  {number} length
+    * @return {string}
+    */
+    function makeRandomString(length) {
+        var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var result = [];
+        for (var i = 0; i < length; i += 1) {
+            result.push(alphabet.charAt(getRandomInt(0, alphabet.length - 1)));
+        }
+        return result.join('');
+    }
+
+    /**
+    * @param {number} value
+    * @return {number}
+    */
+    function floor(value) {
+        return Math.floor(value);
+    }
+
+    /**
+    * @return {number}
+    */
+    function random() {
+        return Math.random();
+    }
+}(window));
+</script>
+</body>
+</html>
