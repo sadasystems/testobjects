@@ -84,7 +84,7 @@
                 // Example:
                 // X-Host-Name: edge161.01.sjc2
                 match = /x-host-name:\s*([.\w]+)/i.exec(headers);
-                console.log(match);
+                // console.log(match);
                 if (match && match[1]) {
                     report('s', match[1]);
                     return;
