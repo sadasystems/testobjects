@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Custom Node ID Test Object</title>
+</head>
+<body>
+<script>
+(function(){var d,a=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search),e=a[1],f=a[2],g=a[3],h=a[4],k=a[5],b;b=function(c,a){var b={source:"uni",s:c,p:{z:g,c:h,i:k},r:{z:e,c:f}};"undefined"!==typeof a&&(b.node_id=a);parent.postMessage(JSON.stringify(b),"*")};d=function(a,b){return Math.floor(Math.random()*(b-a+1))+a};"undefined"===typeof XMLHttpRequest?b("e"):(a=new XMLHttpRequest,b("l"),a.open("GET","/r20.gif?rnd="+function(a){var b,c=[];for(b=0;b<a;b++)c.push("abcdefghijklmnopqrstuvwxyz".charAt(d(0,
+25)));return c.join("")}(32),!0),a.onreadystatechange=function(){var a;if(4===this.readyState){if(200===this.status&&(a=this.getAllResponseHeaders(),(a=/X-Served-By:\s*(.*)/im.exec(a))&&2===a.length)){node=a[1].replace(/\-/g,".");b("s",node);return}b("e")}},a.send())})();
+</script>
+</body>
+</html>
