@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Custom Node ID Test Object</title>
+</head>
+<body>
+<script>
+(function(){var b=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search),f=b[1],g=b[2],h=b[3],k=b[4],l=b[5];var e=function(c,a){var d={source:"uni",s:c,p:{z:h,c:k,i:l},r:{z:f,c:g}};"undefined"!==typeof a&&(d.node_id=a);parent.postMessage(JSON.stringify(d),"*")};var m=function(c,a){return Math.floor(Math.random()*(a-c+1))+c};"undefined"===typeof XMLHttpRequest?e("e"):(b=new XMLHttpRequest,e("l"),b.open("GET","/img/14/r20.gif?rnd="+function(c){var a,d=[];for(a=0;a<c;a++)d.push("abcdefghijklmnopqrstuvwxyz".charAt(m(0,
+25)));return d.join("")}(32),!0),b.onreadystatechange=function(){var c,a;if(4===this.readyState){if(200===this.status){var d=this.getAllResponseHeaders();var b=/via:\s\d\.\d\s(\w+)\.cloudfront.net/i.exec(d);d=/x-amz-cf-id:\s+(.*)/i.exec(d);b&&2===b.length&&(c=b[1]);d&&2===d.length&&(a=d[1]);if(c&&a){e("s",c+"@"+a);return}if(c){e("s",c);return}if(a){e("s",a);return}}e("e")}},b.send())})();
+</script>
+</body>
+</html>
