@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Custom Node ID Test Object</title>
+</head>
+<body>
+    <script>
+    (function() {
+        var get_random_number,
+        get_random_string,
+        match = /rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search),
+        requestor_zone_id = match[1],
+        requestor_customer_id = match[2],
+        provider_zone_id = match[3],
+        provider_customer_id = match[4],
+        provider_id = match[5],
+        report,
+        request;
+
+        report = function(status, node_id) {
+            var result = {
+                source: 'uni',
+                s: status,
+                p: {
+                    z: provider_zone_id,
+                    c: provider_customer_id,
+                    i: provider_id
+                },
+                r: {
+                    z: requestor_zone_id,
+                    c: requestor_customer_id
+                }
+            };
+            if ('undefined' !== typeof node_id) {
+                result.node_id = node_id;
+            }
+            parent.postMessage(JSON.stringify(result), "*");
+        };
+
+        get_random_number = function(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+
+        get_random_string = function(result_length) {
+            var alphabet = 'abcdefghijklmnopqrstuvwxyz', i, result = [];
+            for (i = 0; i < result_length; i++) {
+                result.push(alphabet.charAt(get_random_number(0, alphabet.length - 1)));
+            }
+            return result.join('');
+        };
+
+        if ('undefined' === typeof XMLHttpRequest) {
+            report('e');
+            return;
+        }
+        request = new XMLHttpRequest();
+
+        // Report that the test object has loaded, so we kill the parent timer
+        report('l');
+
+        // Specify the path of a resource in the current domain, the response of
+        // which will supply the node id in a header.  We add a randomized query
+        // string for cache-busting purposes.
+        request.open('GET', '/img/17/r20.gif?rnd=' + get_random_string(32), true);
+
+        // Specify a custom request header, which will cause the node id to be
+        // returned via a response header.  This isn't necessary unless the
+        // server requires it.
+        //request.setRequestHeader('X-Some-Custom-Header', 'Gimme the Node ID!');
+
+
+        request.onreadystatechange = function() {
+            var makeNodeString = function(headers) {
+                var fromCompoundHeader = function(value) {
+                    var parts = value.split(',');
+                    for (var i = 0; i < parts.length; i++) {
+                        var elems = parts[i].trim().split(' ');
+                        var node = elems[2];
+                        var response = elems[0].charAt(elems[0].length-1);
+                        parts[i] = response + '_' + node;
+                    }
+                    return parts.join('|');
+                };
+                // Powered-By-ChinaCache: MISS from CHN-WH-7-335
+                var re = /powered-by-chinacache:\s*(.*)/img;
+                var match = re.exec(headers);
+                var results = [];
+                while (match) {
+                    //console.log(match);
+                    if (-1 < match[1].indexOf(',')) {
+                        return fromCompoundHeader(match[1]);
+                    }
+                    var elems = match[1].split(' ');
+                    var node = elems[2];
+                    var response = elems[0].charAt(elems[0].length-1);
+                    var uni = response + '_' + node;
+                    results.push(uni);
+                    match = re.exec(headers);
+                }
+                if (results.length) {
+                    return results.join('|');
+                }
+                return null;
+            };
+            if (4 === this.readyState) {
+                if (200 === this.status) {
+                    var nodeString = makeNodeString(this.getAllResponseHeaders());
+                    if (nodeString) {
+                        report('s', nodeString);
+                    }
+                }
+                report('e');
+            }
+        };
+        request.send();
+    }());
+    </script>
+</body>
+</html>
