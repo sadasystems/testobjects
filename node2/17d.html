@@ -80,7 +80,7 @@
                         var response = elems[0].charAt(elems[0].length-1);
                         parts[i] = response + '_' + node;
                     }
-                    return parts.join('|');
+                    return parts.join('@');
                 };
                 // Powered-By-ChinaCache: MISS from CHN-WH-7-335
                 var re = /powered-by-chinacache:\s*(.*)/img;
@@ -99,7 +99,7 @@
                     match = re.exec(headers);
                 }
                 if (results.length) {
-                    return results.join('|');
+                    return results.join('@');
                 }
                 return null;
             };
