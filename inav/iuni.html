@@ -1,0 +1,9 @@
+<html><head><script>
+var h={timing:function(a,b){b(((window.performance||{}).timing||{})[a])},
+uniqueNodeId:function(a,b){var c=new XMLHttpRequest;c.open("GET",window.location.href);
+c.send();c.onreadystatechange=function(){var d=c.readyState;if(2==d){
+var e=(new RegExp(a,"mi")).exec(c.getAllResponseHeaders());e&&(b(e[1]),b=0)}4==d&&b&&b(1)}}};
+window.addEventListener("message",function(a){var b=[],c=a.data.length;try{
+for(var d=0;d<a.data.length;d++){var e=d,f=function(a){b[e]=a;c--;c||window.parent.postMessage(b,"*")};
+try{var g=a.data[d];h[g[0]](g[1],f)}catch(k){f(void 0)}}}catch(k){}});
+</script></head></html>

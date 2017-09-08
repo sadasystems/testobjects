@@ -1,0 +1,6 @@
+<html><head><script>
+var e={timing:function(a){return((window.performance||{}).timing||{})[a]}};
+window.addEventListener("message",function(a){var b=[];try{for(var c=0;c<a.data.length;c++)
+try{var d=a.data[c];b.push(e[d[0]](d[1]))}catch(f){b.push(void 0)}}catch(f){}
+window.parent.postMessage(b,"*")});
+</script></head></html>
