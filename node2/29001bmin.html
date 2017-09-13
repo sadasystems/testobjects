@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Custom Node ID Test Object</title>
+</head>
+<body>
+<script>
+(function(){function e(a,c){var d={source:"uni",s:a,p:{z:f,c:g,i:h},r:{z:k,c:l}};"undefined"!==typeof c&&(d.a=c);parent.postMessage(JSON.stringify(d),"*")}var b=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search),k=b[1],l=b[2],f=b[3],g=b[4],h=b[5];if("undefined"===typeof XMLHttpRequest)e("e");else{var a=new XMLHttpRequest;e("l");a.open("GET","/img/29001/r20.gif?rnd="+function(a){var c,d=[];for(c=0;c<a;c++)d.push("abcdefghijklmnopqrstuvwxyz".charAt(Math.floor(26*Math.random())+0));return d.join("")}(32),
+!0);a.onreadystatechange=function(){if(4===a.readyState)if(200===a.status){var b=function(c,d){for(var a={},b=0;b<d.length;b++){var e=c.getResponseHeader(d[b]);e&&(a[d[b]]=e)}return a}(a,["via","x-amz-cf-id"]);e("s",encodeURIComponent(function(a){var b=[],c;for(c in a)a.hasOwnProperty(c)&&b.push(c+":"+a[c]);return b.join("@")||"headers not found"}(b)))}else e("e")};a.send()}})();
+</script>
+</body>
+</html>
