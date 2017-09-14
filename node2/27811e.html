@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Custom Node ID Test Object</title>
+</head>
+<body>
+<script>
+// ==ClosureCompiler==
+// @compilation_level ADVANCED_OPTIMIZATIONS
+// @warning_level VERBOSE
+// ==/ClosureCompiler==
+(function() {
+    var match = /rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search);
+    var requestor_zone_id = match[1];
+    var requestor_customer_id = match[2];
+    var provider_zone_id = match[3];
+    var provider_customer_id = match[4];
+    var provider_id = match[5];
+    /**
+     * @param {string} status
+     * @param {string=} node_id
+     * @return {void}
+     */
+    var report = function(status, node_id) {
+        var result = {
+            'source': 'uni',
+            's': status,
+            'p': {
+                'z': provider_zone_id,
+                'c': provider_customer_id,
+                'i': provider_id
+            },
+            'r': {
+                'z': requestor_zone_id,
+                'c': requestor_customer_id
+            }
+        };
+        if ('undefined' !== typeof node_id) {
+            result['node_id'] = node_id;
+        }
+        parent.postMessage(JSON.stringify(result), "*");
+    };
+    /**
+     * @param {number} min
+     * @param {number} max
+     * @return {number}
+     */
+    var get_random_number = function(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+    /**
+     * @param {number} result_length
+     * @return {string}
+     */
+    var get_random_string = function(result_length) {
+        var alphabet = 'abcdefghijklmnopqrstuvwxyz', i, result = [];
+        for (i = 0; i < result_length; i++) {
+            result.push(alphabet.charAt(get_random_number(0, alphabet.length - 1)));
+        }
+        return result.join('');
+    };
+    if ('undefined' === typeof XMLHttpRequest) {
+        report('e');
+        return;
+    }
+    var request = new XMLHttpRequest();
+    // Report that the test object has loaded, so we kill the parent timer
+    report('l');
+    // Specify the path of a resource in the current domain, the response of
+    // which will supply the node id in a header.  We add a randomized query
+    // string for cache-busting purposes.
+    request.open('GET', '/img/27811/r20.gif?rnd=' + get_random_string(32), true);
+    // Specify a custom request header, which will cause the node id to be
+    // returned via a response header.  This isn't necessary unless the
+    // server requires it.
+    //request.setRequestHeader('X-Some-Custom-Header', 'Gimme the Node ID!');
+    request.onreadystatechange = function() {
+        if (4 === request.readyState) {
+            if (200 === request.status) {
+                var headerName = 'via';
+                var notFoundMessage = headerName + ' header not found';
+                report('s', request.getResponseHeader(headerName) || notFoundMessage);
+                return;
+            }
+            report('e');
+        }
+    };
+    request.send();
+}());
+</script>
+</body>
+</html>
