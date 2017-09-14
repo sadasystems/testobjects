@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Custom Node ID Test Object</title>
+</head>
+<body>
+<script>
+(function(){function c(a,d){var b={source:"uni",s:a,p:{z:e,c:f,i:g},r:{z:h,c:k}};"undefined"!==typeof d&&(b.node_id=d);parent.postMessage(JSON.stringify(b),"*")}var b=/rnd=(\d+)-(\d+)-(\d+)-(\d+)-(\d+)/.exec(location.search),h=b[1],k=b[2],e=b[3],f=b[4],g=b[5];if("undefined"===typeof XMLHttpRequest)c("e");else{var a=new XMLHttpRequest;c("l");a.open("GET","/img/31610/r20.gif?rnd="+function(b){var a,c=[];for(a=0;a<b;a++)c.push("abcdefghijklmnopqrstuvwxyz".charAt(Math.floor(26*Math.random())+0));return c.join("")}(32),
+!0);a.onreadystatechange=function(){4===a.readyState&&(200===a.status?c("s",a.getResponseHeader("x-id")||"x-id header not found"):c("e"))};a.send()}})();
+</script>
+</body>
+</html>
