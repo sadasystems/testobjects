@@ -75,7 +75,7 @@
         if (4 === this.readyState) {
             if (200 === this.status) {
                 headers = this.getAllResponseHeaders();
-                match = /server: ecs \(([\w]+)\/[\w]+\)/i.exec(headers);
+                match = /my-server: ecs \(([\w]+)\/[\w]+\)/i.exec(headers);
                 //console.log(match);
                 if (match) {
                     if (2 === match.length) {
