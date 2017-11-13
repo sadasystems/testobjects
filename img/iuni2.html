@@ -1,0 +1,5 @@
+<html><head><script>
+function l(b,a){var c=Array.prototype.slice.call(arguments,1);return function(){var a=c.slice();a.push.apply(a,arguments);return b.apply(this,a)}};var p={timing:m,uniqueNodeId:n};function m(b,a){a(((window.performance||{}).timing||{})[b])}
+function n(b,a){var c=new XMLHttpRequest;c.open("GET",window.location.href);c.send();c.onreadystatechange=function(){var k=c.readyState;if(2==k&&"function"==typeof a){var d=[],f=b.split(","),e=f.length,g,h;if(1==e)h=f[0].trim(),(g=c.getResponseHeader(h))?a(g):a(h+" header not found");else if(1<e){for(;e--;)h=f[e].trim(),(g=c.getResponseHeader(h))&&d.push(h.toLowerCase()+":"+g);d.length?a(d.join("@")):a("headers not found")}a=0}4==k&&"function"==typeof a&&a("1")}}
+window.addEventListener("message",function(b){function a(a,b){c[a]=b;k--;k||window.parent.postMessage(c,"*")}var c=[],k=b.data.length;try{for(var d=0;d<b.data.length;d++){var f=l(a,d);try{var e=b.data[d];p[e[0]](e[1],f)}catch(g){f(void 0)}}}catch(g){}});
+</script></head></html>
