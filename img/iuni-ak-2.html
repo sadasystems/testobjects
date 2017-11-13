@@ -1,0 +1,5 @@
+<html><head><script>
+function l(c,a){var b=Array.prototype.slice.call(arguments,1);return function(){var a=b.slice();a.push.apply(a,arguments);return c.apply(this,a)}};var p={timing:m,uniqueNodeId:n};function m(c,a){a(((window.performance||{}).timing||{})[c])}
+function n(c,a){var b=new XMLHttpRequest;b.open("GET",window.location.href);b.setRequestHeader("Pragma","akamai-x-cache-on");b.send();b.onreadystatechange=function(){var k=b.readyState;if(2==k&&"function"==typeof a){var d=[],f=c.split(","),e=f.length,g,h;if(1==e)h=f[0].trim(),(g=b.getResponseHeader(h))?a(g):a(h+" header not found");else if(1<e){for(;e--;)h=f[e].trim(),(g=b.getResponseHeader(h))&&d.push(h.toLowerCase()+":"+g);d.length?a(d.join("@")):a("headers not found")}a=0}4==k&&"function"==typeof a&&
+a("1")}}window.addEventListener("message",function(c){function a(a,c){b[a]=c;k--;k||window.parent.postMessage(b,"*")}var b=[],k=c.data.length;try{for(var d=0;d<c.data.length;d++){var f=l(a,d);try{var e=c.data[d];p[e[0]](e[1],f)}catch(g){f(void 0)}}}catch(g){}});
+</script></head></html>
