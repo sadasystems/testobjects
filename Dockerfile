@@ -1,6 +1,6 @@
 FROM nginx
 
-COPY . /usr/share/nginx/html
+COPY . /etc/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
 ADD pyutil/resources/testobjects.nginx.conf.example /etc/nginx/conf.d/testobjects.cedexis.com.conf
 
