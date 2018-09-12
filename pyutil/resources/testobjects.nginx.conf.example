@@ -4,7 +4,7 @@ server {
     server_name _;
 
     location /r16 {
-        alias /etc/nginx/html/r16;
+        alias /home/jacob/repos/cedexis/testobjects/r16;
         gzip_static on;
     }
 }
